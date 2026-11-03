@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "512480568649",
+    "project_id": "conectaupv",
+    "storage_bucket": "conectaupv.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512480568649:android:984533ee4bdbdd6a722698",
+        "android_client_info": {
+          "package_name": "com.example.conecta_upv"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3IQQ-JSmw052J-BwofBjrWrxZe74SVug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512480568649:android:54e6e08e000f8cde722698",
+        "android_client_info": {
+          "package_name": "com.example.prueba1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3IQQ-JSmw052J-BwofBjrWrxZe74SVug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
