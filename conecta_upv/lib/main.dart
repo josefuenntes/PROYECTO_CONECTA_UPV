@@ -12,6 +12,14 @@ import 'SWIPE/swipe_inicio_diseno.dart';
 import 'SWIPE/swipe_info_diseno.dart';
 import 'EXPLORAR/explorar_inicio_diseno.dart';
 import 'CHATS/chats_inicio_diseno.dart';
+import 'CHATS/chats_conecta2_diseno.dart';
+import 'CHATS/chats_seguridad_diseno.dart';
+import 'PERFIL/perfil_inicio_diseno.dart';
+import 'PERFIL/perfil_sobremi_diseno.dart';
+import 'PERFIL/perfil_aprender_diseno.dart';
+import 'PERFIL/perfil_ensenar_diseno.dart';
+import 'PERFIL/perfil_ajustes_diseno.dart';
+import 'PERFIL/perfil_reportar_diseno.dart';
 
 void main() {
   runApp(const ConectaUpvApp());
@@ -58,7 +66,23 @@ class ConectaUpvApp extends StatelessWidget {
     '/explorar_inicio': (context) => const ExplorarDiseno(),
 
 
-    '/chats_inicio':(context) => const ChatsInicioDiseno(),
+    // Rutas para Chats
+    '/chats': (context) => const ChatsInicioDiseno(),     
+    '/chats_inicio': (context) => const ChatsInicioDiseno(),
+    '/chats_conecta2': (context) => const ChatsConecta2Diseno(),
+    '/chats_seguridad': (context) => const ChatsSeguridadDiseno(),
+
+
+
+    //rutas para perfil
+
+    '/perfil':(context) => const PerfilDiseno(),
+    '/perfil_inicio': (context) => const PerfilDiseno(),
+    '/perfil_sobremi': (context) => const PerfilSobreMiDiseno(),
+    '/perfil_aprender': (context) => const PerfilAprenderDiseno(),
+    '/perfil_ensenar':(context) => const PerfilEnsenarDiseno(),
+    '/perfil_ajustes':(context) => const PerfilAjustesDiseno(),
+    '/perfil_reportar': (context) => const PerfilReportarDiseno(),
 
   },    );
   }

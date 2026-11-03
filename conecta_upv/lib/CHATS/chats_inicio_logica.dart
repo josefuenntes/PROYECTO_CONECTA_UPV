@@ -158,13 +158,12 @@ void cambiarTab(BuildContext context, int index) {
       case 2:
         // Ya estamos en Chats
         break;
-      case 3:
-        // Futura pantalla de Perfil
-        break;
-    }
+case 3:
+  Navigator.pushReplacementNamed(context, '/perfil');
+  break;    }
   }
   // 🔹 Abrir la conversación seleccionada (Paso 2)
   void abrirChat(BuildContext context, ModeloChat chat) {
-    Navigator.pushNamed(context, '/chats_conectados', arguments: chat);
+    Navigator.pushNamed(context, '/chats_conecta2', arguments: chat);
   }
 }

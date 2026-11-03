@@ -133,9 +133,10 @@ void cambiarTab(BuildContext context, int index) {
         Navigator.pushReplacementNamed(context, '/chats_inicio');
         break;
       case 3:
-        // Futura pantalla de Perfil
-        break;
-    }
+        Navigator.pushReplacementNamed(context, '/perfil');
+        break;  
+        
+      }
   }  void filtrarPorMateria(String materia) {
     _filtroMateria = materia;
     _indiceActual = 0;

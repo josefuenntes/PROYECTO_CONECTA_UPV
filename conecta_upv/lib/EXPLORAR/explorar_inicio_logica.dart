@@ -93,7 +93,6 @@ void cambiarTab(BuildContext context, int index) {
         Navigator.pushReplacementNamed(context, '/chats_inicio'); //  Permite ir a Chats desde Explorar
         break;
       case 3:
-        // Futura pantalla de Perfil
-        break;
-    }
+      Navigator.pushReplacementNamed(context, '/perfil');
+      break;    }
   }}

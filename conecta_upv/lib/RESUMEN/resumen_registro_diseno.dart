@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'resumen_registro_logica.dart';
 
+
+
 class ResumenDiseno extends StatefulWidget {
   const ResumenDiseno({super.key});
 
