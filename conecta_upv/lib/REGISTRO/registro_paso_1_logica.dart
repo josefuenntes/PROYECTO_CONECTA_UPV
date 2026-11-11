@@ -1,34 +1,45 @@
 import 'package:flutter/material.dart';
 
 class RegistroPaso1Logica extends ChangeNotifier {
-  // Controladores de texto para capturar las entradas del formulario
+  // Controladores de texto vacíos desde inicio
   final TextEditingController nombreController = TextEditingController();
-  final TextEditingController apellidosController = TextEditingController();
-  final TextEditingController aliasController = TextEditingController();
+  final TextEditingController apellidoPaternoController = TextEditingController();
+  final TextEditingController apellidoMaternoController = TextEditingController();
+  final TextEditingController matriculaController = TextEditingController();
   final TextEditingController correoController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
   // Estados de la vista
-  bool _guardarAliasEnPerfil = true;
   bool _ocultarPassword = true;
   bool _ocultarConfirmPassword = true;
   bool _estaCargando = false;
 
-  // Getters para consultar los estados
-  bool get guardarAliasEnPerfil => _guardarAliasEnPerfil;
+  // Selección de datos académicos en blanco (null por defecto)
+  int? _edadSeleccionada;
+  String? _cuatrimestreSeleccionado;
+  String? _carreraSeleccionada;
+
+  // Catálogos de opciones actualizados
+  final List<int> listaEdades = List.generate(15, (index) => 17 + index); // 17 a 31 años
+  final List<String> listaCuatrimestres = ['1', '2', '3', '4', '5', 'ESTADIA 1', '7', '8', '9', 'ESTADIA 2'];
+  final List<String> listaCarreras = [
+    'Ingenieria en Tecnologias de la Informacion e Innovacion Digital',
+    'Ingenieria Mecatronica',
+    'Ingenieria Industrial',
+    'Licenciatura en Administracion y Gestion Empresarial',
+    'Ingenieria en Sistemas Automotrices',
+  ];
+
+  // Getters
   bool get ocultarPassword => _ocultarPassword;
   bool get ocultarConfirmPassword => _ocultarConfirmPassword;
   bool get estaCargando => _estaCargando;
+  int? get edadSeleccionada => _edadSeleccionada;
+  String? get cuatrimestreSeleccionado => _cuatrimestreSeleccionado;
+  String? get carreraSeleccionada => _carreraSeleccionada;
 
-  // Acciones de actualización de estado
-  void alternarGuardarAlias(bool? valor) {
-    if (valor != null) {
-      _guardarAliasEnPerfil = valor;
-      notifyListeners();
-    }
-  }
-
+  // Acciones de actualización
   void alternarVisibilidadPassword() {
     _ocultarPassword = !_ocultarPassword;
     notifyListeners();
@@ -39,18 +50,53 @@ class RegistroPaso1Logica extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Proceso de validación y simulación de registro
-  // Proceso de validación y navegación al Paso 2
-// Proceso de validacion y navegacion al Paso 2
+  void seleccionarEdad(int? nuevaEdad) {
+    if (nuevaEdad != null) {
+      _edadSeleccionada = nuevaEdad;
+      notifyListeners();
+    }
+  }
+
+  void seleccionarCuatrimestre(String cuatrimestre) {
+    _cuatrimestreSeleccionado = cuatrimestre;
+    notifyListeners();
+  }
+
+  void seleccionarCarrera(String? nuevaCarrera) {
+    if (nuevaCarrera != null) {
+      _carreraSeleccionada = nuevaCarrera;
+      notifyListeners();
+    }
+  }
+
+  // Proceso de validación y navegación
   Future<void> procesarRegistro(BuildContext context) async {
     final nombre = nombreController.text.trim();
-    final apellidos = apellidosController.text.trim();
+    final apellidoPaterno = apellidoPaternoController.text.trim();
+    final apellidoMaterno = apellidoMaternoController.text.trim();
+    final matricula = matriculaController.text.trim();
     final correo = correoController.text.trim();
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
 
-    if (nombre.isEmpty || apellidos.isEmpty || correo.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (nombre.isEmpty ||
+        apellidoPaterno.isEmpty ||
+        apellidoMaterno.isEmpty ||
+        matricula.isEmpty ||
+        _edadSeleccionada == null ||
+        _cuatrimestreSeleccionado == null ||
+        _carreraSeleccionada == null ||
+        correo.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       _mostrarMensaje(context, 'Por favor completa todos los campos obligatorios (*)', esError: true);
+      return;
+    }
+
+    // 🔒 Restricción de Matrícula: Exactamente 7 dígitos
+    final RegExp reglaMatricula = RegExp(r'^\d{7}$');
+    if (!reglaMatricula.hasMatch(matricula)) {
+      _mostrarMensaje(context, 'La matrícula debe ser de exactamente 7 dígitos numéricos', esError: true);
       return;
     }
 
@@ -60,7 +106,7 @@ class RegistroPaso1Logica extends ChangeNotifier {
     }
 
     if (password != confirmPassword) {
-      _mostrarMensaje(context, 'Las contrasenas no coinciden', esError: true);
+      _mostrarMensaje(context, 'Las contraseñas no coinciden', esError: true);
       return;
     }
 
@@ -74,16 +120,23 @@ class RegistroPaso1Logica extends ChangeNotifier {
 
     if (!context.mounted) return;
 
-    // 📦 Empaquetar datos del Paso 1
-    final Map<String, dynamic> datosPaso1 = {
+    // 📦 Empaquetar todos los datos unificados
+    final Map<String, dynamic> datosUnificados = {
       'nombre': nombre,
-      'apellidos': apellidos,
+      'apellidoPaterno': apellidoPaterno,
+      'apellidoMaterno': apellidoMaterno,
+      'apellidos': '$apellidoPaterno $apellidoMaterno',
+      'matricula': matricula,
+      'edad': _edadSeleccionada,
+      'cuatrimestre': _cuatrimestreSeleccionado,
+      'carrera': _carreraSeleccionada,
       'correo': correo,
     };
 
-    // 🚀 Pasar datos como argumentos al Paso 2
-    Navigator.pushNamed(context, '/registro_paso_2', arguments: datosPaso1);
+    // 🚀 Navegar al siguiente paso
+    Navigator.pushNamed(context, '/registro_paso_3', arguments: datosUnificados);
   }
+
   void irAIniciarSesion(BuildContext context) {
     Navigator.pushNamed(context, '/login');
   }
@@ -105,8 +158,9 @@ class RegistroPaso1Logica extends ChangeNotifier {
   @override
   void dispose() {
     nombreController.dispose();
-    apellidosController.dispose();
-    aliasController.dispose();
+    apellidoPaternoController.dispose();
+    apellidoMaternoController.dispose();
+    matriculaController.dispose();
     correoController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();

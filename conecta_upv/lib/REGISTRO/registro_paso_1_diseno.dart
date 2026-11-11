@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'registro_paso_1_logica.dart';
 
 class RegistroPaso1Diseno extends StatefulWidget {
@@ -27,6 +28,8 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
   static const Color colorContenedorBlanco = Color(0xFFFFFFFF);
   static const Color colorContenedorBajo = Color(0xFFF6F2FF);
   static const Color colorContenedorAlto = Color(0xFFE9E5FF);
+  static const Color colorFondoInput = Color(0xFFF8FAFC);
+  static const Color colorBordeInput = Color(0xFFE2E8F0);
 
   @override
   void initState() {
@@ -73,7 +76,6 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     );
   }
 
-  // 1. Barra superior AppBar
   PreferredSizeWidget _construirAppBar() {
     return AppBar(
       backgroundColor: colorSuperficie.withOpacity(0.9),
@@ -104,7 +106,6 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     );
   }
 
-  // 2. Barra de identidad institucional UPV
   Widget _construirBarraIdentidadUPV() {
     return Row(
       children: [
@@ -160,7 +161,6 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     );
   }
 
-  // 3. Indicador visual de progreso paso 1 de 3
   Widget _construirIndicadorProgresoPaso() {
     return Column(
       children: [
@@ -186,7 +186,7 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
                   Icon(Icons.circle, size: 6, color: colorPrimario),
                   SizedBox(width: 6),
                   Text(
-                    'Paso 1 de 3',
+                    'Paso 1 de 2',
                     style: TextStyle(
                       color: colorPrimario,
                       fontWeight: FontWeight.bold,
@@ -220,23 +220,12 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Container(
-                height: 6,
-                decoration: BoxDecoration(
-                  color: colorContenedorAlto,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
           ],
         ),
       ],
     );
   }
 
-  // 4. Banner promocional Hero con Mascota Jaguar
   Widget _construirBannerBienvenidaHero() {
     return Container(
       width: double.infinity,
@@ -325,7 +314,6 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     );
   }
 
-  // 5. Formulario agrupado
   Widget _construirFormularioRegistro() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,31 +327,34 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
         ),
         const SizedBox(height: 16),
 
-        _construirEtiquetaCampo('Apellidos:', obligatorio: true),
+        _construirEtiquetaCampo('Apellido Paterno:', obligatorio: true),
         const SizedBox(height: 4),
         _construirCampoEntradaTexto(
-          controller: _logica.apellidosController,
+          controller: _logica.apellidoPaternoController,
           icono: Icons.badge_outlined,
-          placeholder: 'Tus apellidos',
+          placeholder: 'Tu apellido paterno',
         ),
         const SizedBox(height: 16),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _construirEtiquetaCampo('¿Cómo te gusta que te llamen?:', obligatorio: false),
-            const Text('Opcional', style: TextStyle(color: colorTextoAtenuado, fontSize: 11)),
-          ],
-        ),
+        _construirEtiquetaCampo('Apellido Materno:', obligatorio: true),
         const SizedBox(height: 4),
         _construirCampoEntradaTexto(
-          controller: _logica.aliasController,
-          icono: Icons.sentiment_satisfied_outlined,
-          placeholder: 'Ej. Josema, Zeus, Joss, Ari',
+          controller: _logica.apellidoMaternoController,
+          icono: Icons.badge_outlined,
+          placeholder: 'Tu apellido materno',
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
-        _construirTarjetaCheckboxAlias(),
+        // Fila de Matrícula (solo 7 dígitos) y Edad
+        _construirFilaMatriculaYEdad(),
+        const SizedBox(height: 16),
+
+        // Selección de Cuatrimestre
+        _construirSeccionCuatrimestres(),
+        const SizedBox(height: 16),
+
+        // Selección de Carrera
+        _construirSeccionCarreraUniversitaria(),
         const SizedBox(height: 16),
 
         Row(
@@ -431,7 +422,253 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     );
   }
 
-  // Componentes modulares reutilizables
+  // Fila dividida: Matrícula y Edad
+  Widget _construirFilaMatriculaYEdad() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _construirEtiquetaCampo('Matrícula:', obligatorio: true),
+              const SizedBox(height: 4),
+              _construirCampoEntradaTexto(
+                controller: _logica.matriculaController,
+                icono: Icons.verified_outlined,
+                placeholder: '7 dígitos',
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(7),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _construirEtiquetaCampo('Edad:', obligatorio: true),
+              const SizedBox(height: 4),
+              Container(
+                height: 48,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: colorContenedorBlanco,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<int>(
+                    value: _logica.edadSeleccionada,
+                    hint: const Text(
+                      'Edad',
+                      style: TextStyle(color: colorTextoAtenuado, fontSize: 13),
+                    ),
+                    isExpanded: true,
+                    icon: const Icon(Icons.keyboard_arrow_down, color: colorTextoAtenuado, size: 20),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: colorTextoPrincipal,
+                    ),
+                    onChanged: _logica.seleccionarEdad,
+                    items: _logica.listaEdades.map((int edad) {
+                      return DropdownMenuItem<int>(
+                        value: edad,
+                        child: Text('$edad años'),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Sección Cuatrimestres con ESTADIA 1 y ESTADIA 2
+  Widget _construirSeccionCuatrimestres() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _construirEtiquetaCampo('Cuatrimestre:', obligatorio: true),
+        const SizedBox(height: 8),
+        Column(
+          children: [
+            Row(
+              children: ['1', '2', '3', '4', '5'].map((item) {
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre(item),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre('ESTADIA 1', esEstadia: true),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre('7'),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre('8'),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre('9'),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: _construirBotonOpcionCuatrimestre('ESTADIA 2', esEstadia: true),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _construirBotonOpcionCuatrimestre(String texto, {bool esEstadia = false}) {
+    final bool estaSeleccionado = _logica.cuatrimestreSeleccionado == texto;
+
+    return SizedBox(
+      height: 38,
+      child: ElevatedButton(
+        onPressed: () => _logica.seleccionarCuatrimestre(texto),
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: estaSeleccionado ? colorPrimario : colorContenedorBlanco,
+          elevation: estaSeleccionado ? 3 : 1,
+          shadowColor: colorPrimario.withOpacity(0.25),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: estaSeleccionado ? colorPrimario : colorBordeInput,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (esEstadia) ...[
+              Icon(
+                Icons.school,
+                size: 13,
+                color: estaSeleccionado ? Colors.white : colorTextoPrincipal,
+              ),
+              const SizedBox(width: 2),
+            ],
+            Flexible(
+              child: Text(
+                texto,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: esEstadia ? 10.0 : 13,
+                  fontWeight: FontWeight.bold,
+                  color: estaSeleccionado ? Colors.white : colorTextoPrincipal,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Sección Carrera
+  Widget _construirSeccionCarreraUniversitaria() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _construirEtiquetaCampo('Carrera Universitaria:', obligatorio: true),
+        const SizedBox(height: 4),
+        Container(
+          height: 48,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: colorContenedorBlanco,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 4,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.school_outlined, color: colorTextoAtenuado, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _logica.carreraSeleccionada,
+                    hint: const Text(
+                      'Selecciona tu carrera',
+                      style: TextStyle(color: colorTextoAtenuado, fontSize: 13),
+                    ),
+                    isExpanded: true,
+                    icon: const Icon(Icons.expand_more, color: colorTextoAtenuado, size: 20),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: colorTextoPrincipal,
+                    ),
+                    onChanged: _logica.seleccionarCarrera,
+                    items: _logica.listaCarreras.map((String carrera) {
+                      return DropdownMenuItem<String>(
+                        value: carrera,
+                        child: Text(
+                          carrera,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _construirEtiquetaCampo(String texto, {required bool obligatorio}) {
     return RichText(
       text: TextSpan(
@@ -460,6 +697,7 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
     bool ocultarTexto = false,
     VoidCallback? onTogglePassword,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Container(
       height: 48,
@@ -478,6 +716,7 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
         controller: controller,
         obscureText: esPassword ? ocultarTexto : false,
         keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
         style: const TextStyle(color: Color(0xFF111827), fontSize: 14),
         decoration: InputDecoration(
           prefixIcon: Icon(icono, color: colorTextoAtenuado, size: 20),
@@ -495,45 +734,6 @@ class _RegistroPaso1DisenoState extends State<RegistroPaso1Diseno> {
           hintStyle: const TextStyle(color: colorTextoAtenuado, fontSize: 14),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        ),
-      ),
-    );
-  }
-
-  Widget _construirTarjetaCheckboxAlias() {
-    return GestureDetector(
-      onTap: () => _logica.alternarGuardarAlias(!_logica.guardarAliasEnPerfil),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: colorContenedorBajo,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: Checkbox(
-                value: _logica.guardarAliasEnPerfil,
-                onChanged: _logica.alternarGuardarAlias,
-                activeColor: colorPrimario,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              ),
-            ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                '¿Te gustaría que te guardemos así como te gusta que te digan en tu perfil público?',
-                style: TextStyle(
-                  color: colorTextoSecundario,
-                  fontSize: 12,
-                  height: 1.3,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

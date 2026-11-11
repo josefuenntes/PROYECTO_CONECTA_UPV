@@ -129,7 +129,7 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
                   Icon(Icons.circle, size: 6, color: colorPrimarioContenedor),
                   SizedBox(width: 6),
                   Text(
-                    'Paso 3 de 3',
+                    'Paso 2 de 2',
                     style: TextStyle(
                       color: colorPrimario,
                       fontWeight: FontWeight.bold,
@@ -144,8 +144,6 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
         const SizedBox(height: 8),
         Row(
           children: [
-            Expanded(child: _construirBarraProgresoIluminada()),
-            const SizedBox(width: 8),
             Expanded(child: _construirBarraProgresoIluminada()),
             const SizedBox(width: 8),
             Expanded(child: _construirBarraProgresoIluminada()),
@@ -259,43 +257,23 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: colorEsmeraldaClaro,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.school, size: 16, color: colorEsmeraldaOscuro),
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  '¿En qué eres bueno? / Puedo enseñar',
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.bold,
-                    color: colorTextoPrincipal,
-                  ),
-                ),
-              ],
-            ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: colorEsmeraldaClaro.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(12),
+                color: colorEsmeraldaClaro,
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(
-                '${seleccionados.length} seleccionadas',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: colorEsmeraldaOscuro,
-                ),
+              child: const Icon(Icons.school, size: 16, color: colorEsmeraldaOscuro),
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              '¿En qué eres bueno? / Puedo enseñar',
+              style: TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.bold,
+                color: colorTextoPrincipal,
               ),
             ),
           ],
@@ -333,43 +311,23 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: colorAmbarClaro,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.trending_up, size: 16, color: colorTerciarioContenedor),
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  '¿Qué quieres aprender o reforzar?',
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.bold,
-                    color: colorTextoPrincipal,
-                  ),
-                ),
-              ],
-            ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                color: colorAmbarClaro.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(12),
+                color: colorAmbarClaro,
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(
-                '${seleccionados.length} seleccionadas',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: colorTerciarioContenedor,
-                ),
+              child: const Icon(Icons.trending_up, size: 16, color: colorTerciarioContenedor),
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              '¿Qué quieres aprender o reforzar?',
+              style: TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.bold,
+                color: colorTextoPrincipal,
               ),
             ),
           ],
@@ -399,7 +357,6 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
     );
   }
 
-  // Chip interactivo con seleccion y boton de eliminar (tachita)
   Widget _construirChipOpcion({
     required String texto,
     required bool esActivo,
@@ -566,13 +523,13 @@ class _RegistroPaso3DisenoState extends State<RegistroPaso3Diseno> {
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-// Dentro de _construirBotonFinalizar:
-  onPressed: _logica.estaCargando
-      ? null
-      : () {
-          final datosAnteriores = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-          _logica.procesarFinalizarPerfil(context, datosAnteriores);
-        },        style: ElevatedButton.styleFrom(
+        onPressed: _logica.estaCargando
+            ? null
+            : () {
+                final datosAnteriores = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+                _logica.procesarFinalizarPerfil(context, datosAnteriores);
+              },
+        style: ElevatedButton.styleFrom(
           backgroundColor: colorPrimarioContenedor,
           elevation: 4,
           shadowColor: colorPrimarioContenedor.withOpacity(0.35),

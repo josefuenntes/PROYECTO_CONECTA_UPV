@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'INTRO/intro_diseno.dart';
 import 'REGISTRO/registro_paso_1_diseno.dart';
-import 'REGISTRO/registro_paso_2_diseno.dart';
 import 'REGISTRO/registro_paso_3_diseno.dart';
 import 'RESUMEN/resumen_registro_diseno.dart';
 import 'BIENVENIDA/bienvenida_diseno.dart';
@@ -50,7 +49,6 @@ class ConectaUpvApp extends StatelessWidget {
   routes: {
     '/': (context) => const IntroduccionDiseno(),
     '/registro': (context) => const RegistroPaso1Diseno(),
-    '/registro_paso_2': (context) => const RegistroPaso2Diseno(),
     '/registro_paso_3': (context) => const RegistroPaso3Diseno(),
     '/resumen': (context) => const ResumenDiseno(),
     '/bienvenida': (context) => const BienvenidaRegistroDiseno(),
